@@ -1,6 +1,6 @@
 # lab-soc-project-by-adriano-ferrao
 # SOC Lab Project    Using Wazuh to detect RDP brute force attacks, outdated packages, and vulnerabilities. Includes Linux basics: user management, permissions, and system hardening for SOC operations.  
-# IS HUTING TIME........ 
+# IS Hunting TIME........ 
 
 This project demonstrates a hands-on approach to creating a Security Operations Center (SOC) lab environment using **Wazuh** with a focus on monitoring and securing **Windows systems**. It covers RDP brute force detection, outdated package and vulnerability identification, and exploring Windows Internals for system hardening and forensic analysis.  
 
