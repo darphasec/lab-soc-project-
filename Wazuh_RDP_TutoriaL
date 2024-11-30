@@ -1,0 +1,46 @@
+To monitor Remote Desktop Protocol (RDP) logon attempts using Wazuh, follow these steps:
+
+1. Install the Wazuh Agent on the Windows Endpoint:
+   - Download the Wazuh agent installer for Windows.
+   - Run the installer via Command Line Interface (CLI) or Graphical User Interface (GUI).
+     - CLI Installation Example:
+       ```cmd
+       wazuh-agent-4.9.2-1.msi /q WAZUH_MANAGER="10.0.0.2"
+       ```
+       Replace `10.0.0.2` with your Wazuh manager's IP address.
+   - After installation, start the Wazuh agent service:
+     ```cmd
+     net start Wazuh
+     ```
+   - For detailed instructions, refer to the [Wazuh documentation on installing agents on Windows endpoints](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-windows.html).
+
+2. Configure Windows Event Logging for RDP:
+   - Ensure that Windows is logging RDP-related events:
+     - Logon events are typically recorded under **Event ID 4624** (successful logon) and **Event ID 4625** (failed logon) in the Security log.
+   - Verify that these events are being generated when RDP connections occur.
+
+3. Set Up Wazuh to Monitor RDP Events:
+   - Wazuh includes built-in rules to detect RDP logon attempts.
+   - To customize or add specific rules, edit the `local_rules.xml` file on the Wazuh manager:
+     ```xml
+     <group name="windows,">
+       <rule id="100100" level="5">
+         <if_sid>60106</if_sid>
+         <field name="win.system.providerName">Microsoft-Windows-TerminalServices-RemoteConnectionManager</field>
+         <description>Terminal Services Remote Connection Manager</description>
+       </rule>
+     </group>
+     ```
+     This example rule triggers an alert when the Terminal Services Remote Connection Manager logs an event.
+   - After modifying rules, restart the Wazuh manager to apply changes
+     ```bash
+     sudo systemctl restart wazuh-manager
+     ```
+   - For more information on configuring custom rules, see the [Wazuh community discussion on monitoring RDP logon events](https://groups.google.com/g/wazuh/c/Gdt47KgTWQo).
+
+4. Verify RDP Monitoring
+   - Initiate RDP connections to the Windows endpoint.
+   - Check the Wazuh dashboard to confirm that alerts are generated for RDP logon attempts.
+   - Ensure that both successful and failed logon attempts are being captured as expected.
+
+these steps, you can effectively monitor RDP logon attempts using Wazuh, enhancing your organization's security posture. 
